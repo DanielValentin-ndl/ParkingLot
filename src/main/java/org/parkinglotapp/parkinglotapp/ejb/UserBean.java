@@ -33,7 +33,10 @@ public class UserBean {
     public List<UserDto> copyUsersToDto(List<User> users){
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users){
+            // AICI ESTE MODIFICAREA:
+            // Adăugăm user.getId() ca primul parametru
             UserDto userDto = new UserDto(
+                    user.getId(),
                     user.getUsername(),
                     user.getEmail()
             );
