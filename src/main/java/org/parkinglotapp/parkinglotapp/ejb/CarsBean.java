@@ -60,7 +60,7 @@ public class CarsBean {
                 return null;
             }
 
-            // Handle owner name safely (in case owner is null)
+
             String ownerName = (car.getOwner() != null) ? car.getOwner().getUsername() : null;
 
             return new CarDto(car.getId(), car.getLicensePlate(), car.getParkingSpot(), ownerName);

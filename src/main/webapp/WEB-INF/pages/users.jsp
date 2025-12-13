@@ -1,19 +1,32 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<t:pageTemplate pageTitle="Cars">
+<t:pageTemplate pageTitle="Users">
     <h1>Users</h1>
-    <div class="container text-center">
-        <c:forEach var="user" items="${users}">
-            <div class="row">
-                <div class="col">
-                        ${user.name};
-                </div>
-                <div class="col">
-                        ${user.email}
-                </div>
-            </div>
-        </c:forEach>
+
+    <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
+        <a href="${pageContext.request.contextPath}/AddUser" class="btn btn-primary btn-lg mb-4">Add User</a>
+    </c:if>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="user" items="${users}">
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
 </t:pageTemplate>

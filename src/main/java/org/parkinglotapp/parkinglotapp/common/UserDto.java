@@ -1,8 +1,8 @@
 package org.parkinglotapp.parkinglotapp.common;
 
 public class UserDto {
-    private Long id;         // Câmp nou
-    private String username; // Redenumit din 'name'
+    private Long id;
+    private String username;
     private String email;
 
     public UserDto(Long id, String username, String email) {
@@ -11,16 +11,18 @@ public class UserDto {
         this.email = email;
     }
 
-    // --- GETTERII SUNT OBLIGATORII PENTRU JSP ---
-
-    public Long getId() { // Fără asta, ${user.id} crapă pagina
+    public Long getId() {
         return id;
     }
 
-    public String getUsername() { // Fără asta, ${user.username} crapă pagina
+    public String getUsername() {
         return username;
     }
 
+    // If your JSP specifically uses ${user.name}, add this helper:
+    public String getName() {
+        return username;
+    }
     public String getEmail() {
         return email;
     }
