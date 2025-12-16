@@ -5,28 +5,45 @@
 <t:pageTemplate pageTitle="Users">
     <h1>Users</h1>
 
-    <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
-        <a href="${pageContext.request.contextPath}/AddUser" class="btn btn-primary btn-lg mb-4">Add User</a>
+    <form method="POST" action="${pageContext.request.contextPath}/Users">
+
+        <c:if test="${pageContext.request.isUserInRole('WRITE_USERS')}">
+            <a href="${pageContext.request.contextPath}/AddUser" class="btn btn-primary btn-lg">Add User</a>
+            <button class="btn btn-secondary btn-lg" type="submit">Invoice</button>
+        </c:if>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="user" items="${users}">
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="user_ids" value="${user.id}" />
+                            </td>
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
+    <c:if test="${not empty invoices}">
+        <h2>Invoices</h2>
+        <c:forEach var="username" items="${invoices}" varStatus="status">
+            ${status.index + 1}. ${username}
+            <br/>
+        </c:forEach>
     </c:if>
 
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="user" items="${users}">
-                    <tr>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </t:pageTemplate>

@@ -68,4 +68,14 @@ public class UserBean {
             entityManager.persist(userGroup);
         }
     }
+
+    public Collection<String> findUsernameByUserIds(Collection<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
+        return entityManager.createQuery("SELECT u.username FROM User u WHERE u.id IN :userIds", String.class)
+                .setParameter("userIds", userIds)
+                .getResultList();
+    }
 }
