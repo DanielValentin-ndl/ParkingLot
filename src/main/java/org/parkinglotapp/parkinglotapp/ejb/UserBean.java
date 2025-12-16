@@ -78,4 +78,20 @@ public class UserBean {
                 .setParameter("userIds", userIds)
                 .getResultList();
     }
+
+    public void updateUser(Long userId, String username, String email, String password) {
+        User user = entityManager.find(User.class, userId);
+
+        user.setUsername(username);
+        user.setEmail(email);
+
+        if (password != null && !password.trim().isEmpty()) {
+            user.setPassword(password);
+        }
+    }
+
+    public UserDto findById(Long id) {
+        User user = entityManager.find(User.class, id);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail());
+    }
 }

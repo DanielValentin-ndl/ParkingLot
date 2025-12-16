@@ -1,9 +1,10 @@
-package org.parkinglotapp.parkinglotapp.servlets;
+package org.parkinglotapp.parkinglotapp.servlets.cars;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.parkinglotapp.parkinglotapp.common.CarDto;
 import org.parkinglotapp.parkinglotapp.common.UserDto;
 import org.parkinglotapp.parkinglotapp.ejb.CarsBean;
 import org.parkinglotapp.parkinglotapp.ejb.UserBean;
@@ -11,10 +12,10 @@ import org.parkinglotapp.parkinglotapp.ejb.UserBean;
 import java.io.IOException;
 import java.util.List;
 
+// Task: Only allow access if the user has the WRITE_CARS usergroup
 @ServletSecurity(value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"}))
-@WebServlet(name = "AddCar", value = "/AddCar")
-public class AddCar extends HttpServlet {
-
+@WebServlet(name = "EditCar", value = "/EditCar")
+public class EditCar extends HttpServlet {
     @Inject
     UserBean userBean;
 
@@ -26,17 +27,24 @@ public class AddCar extends HttpServlet {
             ServletException, IOException {
         List<UserDto> users = userBean.findAllUsers();
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/WEB-INF/pages/addCar.jsp").forward(request, response);
+
+        Long carId = Long.parseLong(request.getParameter("id"));
+        CarDto car = carsBean.findById(carId);
+        request.setAttribute("car", car);
+
+        request.getRequestDispatcher("/WEB-INF/pages/cars/editCar.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
         String licensePlate = request.getParameter("license_plate");
-        String parkingSpot = request.getParameter("parking_spot");
+        String parkingSpot =  request.getParameter("parking_spot");
         Long userId = Long.parseLong(request.getParameter("owner_id"));
+        Long carId = Long.parseLong(request.getParameter("car_id"));
 
-        carsBean.createCar(licensePlate, parkingSpot, userId);
+        carsBean.updateCar(carId, licensePlate, parkingSpot, userId);
+
         response.sendRedirect(request.getContextPath() + "/Cars");
     }
 }

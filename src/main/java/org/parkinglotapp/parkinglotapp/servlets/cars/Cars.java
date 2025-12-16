@@ -1,4 +1,4 @@
-package org.parkinglotapp.parkinglotapp.servlets;
+package org.parkinglotapp.parkinglotapp.servlets.cars;
 
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.inject.Inject;
@@ -28,25 +28,27 @@ public class Cars extends HttpServlet {
     CarsBean carsBean;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<CarDto> cars = carsBean.findAllCars();
         request.setAttribute("cars", cars);
-        request.setAttribute("numberOfFreeParkingSpots", 10);
-        request.getRequestDispatcher("/WEB-INF/pages/cars.jsp").forward(request,response);
+
+        int numberOfFreeParkingSpots = 10 - cars.size();
+        request.setAttribute("numberOfFreeParkingSpots", numberOfFreeParkingSpots);
+
+        request.getRequestDispatcher("/WEB-INF/pages/cars/cars.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] carIdsAsString = request.getParameterValues("car_ids");
-        if(carIdsAsString != null) {
-            List<Long> carIds = new ArrayList<>();
-            for(String carIdAsString : carIdsAsString) {
-                carIds.add(Long.parseLong(carIdAsString));
+        if (carIdsAsString != null) {
+            List<Long> carIds = new java.util.ArrayList<>();
+            for (String id : carIdsAsString) {
+                carIds.add(Long.parseLong(id));
             }
             carsBean.deleteCarsByIds(carIds);
         }
+
         response.sendRedirect(request.getContextPath() + "/Cars");
     }
 }
